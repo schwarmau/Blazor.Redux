@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28902.138
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blazor.Client.Redux", "Blazor.Client.Redux\Blazor.Client.Redux.csproj", "{F6558F6E-18E3-4F7A-82A4-558DA193844A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blazor.Server.Redux", "Blazor.Server.Redux\Blazor.Server.Redux.csproj", "{B72EDBCB-8091-484B-A657-B27DE2BC04ED}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F6558F6E-18E3-4F7A-82A4-558DA193844A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6558F6E-18E3-4F7A-82A4-558DA193844A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6558F6E-18E3-4F7A-82A4-558DA193844A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6558F6E-18E3-4F7A-82A4-558DA193844A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B72EDBCB-8091-484B-A657-B27DE2BC04ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B72EDBCB-8091-484B-A657-B27DE2BC04ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B72EDBCB-8091-484B-A657-B27DE2BC04ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B72EDBCB-8091-484B-A657-B27DE2BC04ED}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3821C519-BE7B-4E8D-9C56-04D31D71F728}
+	EndGlobalSection
+EndGlobal
