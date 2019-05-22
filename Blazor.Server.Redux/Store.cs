@@ -41,6 +41,10 @@ namespace Blazor.Server.Redux
             _future = new List<HistoricStateEntry<TState, object>>();
         }
 
+        /// <summary>
+        /// Dispatches an action to state.
+        /// </summary>
+        /// <param name="action">The action.</param>
         public void Dispatch(TAction action)
         {
             lock (_syncRoot)
