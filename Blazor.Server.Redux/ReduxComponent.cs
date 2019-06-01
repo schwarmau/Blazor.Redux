@@ -7,7 +7,6 @@ namespace Blazor.Server.Redux
     {
         [Inject] protected Store<TState, TAction> Store { get; set; }
         [Inject] protected IUriHelper UriHelper { get; set; }
-        protected TState State => Store.State;
 
         protected override void OnInit()
         {
@@ -15,8 +14,6 @@ namespace Blazor.Server.Redux
             Store.OnStateChanged += OnStateChangedHandler;
             base.OnInit();
         }
-
-        protected void Dispatch(TAction action) => Store.Dispatch(action);
 
         private void OnStateChangedHandler(object sender, EventArgs e)
         {

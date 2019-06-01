@@ -29,8 +29,9 @@ Client-side mostly stayed the same. It still targets the netcoreapp2.0 framework
  The reason being that the application is maintained server-side, so if the user refreshes the page, not only will the components not be disposed of, but also the store will not be disposed, so those OnStateChanged handlers will linger in components with no render tree.
  - Reduced location synchronization from two-way synchronization to one-way synchronization.
  Server-side Blazor operates in a completely different way from client-side, via SignalR connections. Because of this, the render cycle can be interrupted by the UriHelper trying to navigate, and that causes a whole bunch of problems. This means the UriHelper can't synchronize with state. Fortunately, all that *really* means is that you can't call `Dispatch(new ChangeLocationAction(uri))` to navigate. The flipside of that is still true, though, if you navigate the page (via UriHelper or simply with the forward and back buttons in the browser), a ChangeLocationAction will still be dispatched, and you can therefore still handle location changes in your reducers. You're just forced to use the UriHelper to navigate in your components.
+ - Store now has scoped behavior instead of singleton behavior. This makes it behave more like it does in client-side blazor, otherwise multiple users accessing the app would share state.
 
-## Some Notes
+## Some notes
 I deliberately chose not to create an interface for the store, despite some of the benefits.
 This was because I feel that users of this library should not be implementing their own stores, as the point of this library is providing one. The best way to encourage that behavior is to just not allow it. The other drawback is having to make the location synchronization function public. On it's own, that's not a problem, but it means anyone who did want to implement their own store would have to implement that; it just doesn't make sense as a contractual obligation set by the interface.
 
@@ -38,3 +39,32 @@ The reason I bring this up is to recommend a unit testing approach, because not 
  - In the case of the store, you can set the store with a simple newing up: `Store = new Store<TState, TAction>(TState initialState, Reducer<TState, TAction> rootReducer, ReduxOptions<TState, TAction> options);`.
  - To mock the retrieval of properties from state you can either declare a fleshed-out initial state with those properties, or you can inject selectors to your components.
  - To test if an action has been dispatched, set the root reducer to handle any action by setting it in a variable that you can test on: `rootReducer = (state, action) => { dispatchedAction = action; };`
+
+## Using this library
+
+In `Startup.cs`:
+```
+public void ConfigureServices(IServiceCollection services)
+{
+	services.AddReduxStore<ApplicationState, IAction>(yourInitialState, YourRootReducer, options =>
+	{
+		// configure
+		// ex: MaxHistoricalRecords = 20
+	});
+}
+```
+
+Your components should inherit from `ReduxComponent<YourStateType, YourActionType>`:
+```
+public class MyComponent : ReduxComponent<MyState, IAction> { }
+```
+
+I recommend defining your own component base that all your components can inherit from:
+```
+public class MyComponentBase : ReduxComponent<ApplicationState, IAction>
+{
+	protected ApplicationState State => Store.State;
+	protected void Dispatch(IAction action) => Store.Dispatch(action);
+}
+```
+This has the benefit of modularity, so if you ever replace this library with another, or create your own store, all you have to do is uninherit ReduxComponent, inherit from the the default ComponentBase class, and redefine State and Dispatch.
