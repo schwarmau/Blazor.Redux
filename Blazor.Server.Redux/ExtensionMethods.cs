@@ -14,7 +14,7 @@ namespace Blazor.Server.Redux
 		/// <param name="rootReducer">The top-level reducer for the state.</param>
 		/// <param name="configure">Options configuration determining how redux handles certain functions.</param>
 		/// <returns>The singleton store assigned.</returns>
-        public static Store<TState, TAction> AddReduxStore<TState, TAction>(
+        public static void AddReduxStore<TState, TAction>(
             this IServiceCollection services,
             TState initialState,
             Reducer<TState, TAction> rootReducer,
@@ -22,9 +22,7 @@ namespace Blazor.Server.Redux
         {
             ReduxOptions<TState, TAction> options = new ReduxOptions<TState, TAction>();
             configure?.Invoke(options);
-            Store<TState, TAction> store = new Store<TState, TAction>(initialState, rootReducer, options);
-            services.AddScoped<Store<TState, TAction>>(sp => store);
-            return store;
+            services.AddScoped(sp => new Store<TState, TAction>(initialState, rootReducer, options));
         }
     }
 }
