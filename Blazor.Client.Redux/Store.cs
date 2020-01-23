@@ -203,43 +203,42 @@ namespace Blazor.Client.Redux
         #endregion
 
         #region IDisposable Support
-        private bool disposedValue = false;  // to detect redundant calls
+        private bool disposed = false;
+		// optionally add a SafeHandle here instead of using destructor/finalizer
 
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    // free managed resources
-                    if (_uriHelper != null)
-                    {
-                        _uriHelper.OnLocationChanged -= SynchronizeStateLocationWithUri;
-                        OnStateChanged -= SynchronizeUriLocationWithState;
-                    }
-                }
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
 
-                // free unmanaged resources (unmanaged objects)
-                // set large fields to null
+		protected virtual void Dispose(bool disposing)
+		{
+			if (disposed)
+			{
+				return;
+			}
 
-                disposedValue = true;
-            }
-        }
+			if (disposing)
+			{
+				// if using a SafeHandle, dispose it here
 
-        // override a finalizer if Dispose(bool disposing) above has code to free unmanaged resources
-        // ~Store()
-        // {
-        //   // do not change this code; put cleanup code in Dispose(bool disposing) above
-        //   Dispose(false);
-        // }
+				// free managed resources here
+				if (_navigationManager != null)
+				{
+					_navigationManager.LocationChanged -= SynchronizeStateLocationWithUri;
+					OnStateChanged -= SynchronizeUriLocationWithState;
+				}
+			}
 
-        void IDisposable.Dispose()
-        {
-            // do not change this code; put cleanup code in Dispose(bool disposing) above
-            Dispose(true);
-            // uncomment the following line if the finalizer is overridden above
-            // GC.SuppressFinalize(this);
-        }
+			disposed = true;
+		}
+
+		~Store()
+		{
+			// do not change this code; add cleanup code to Dispose(bool disposing) instead
+			Dispose(false);
+		}
         #endregion
     }
 }
