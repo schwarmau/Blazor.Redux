@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Routing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -157,22 +158,22 @@ namespace Blazor.Server.Redux
                     _locationActionCreator = _options.LocationActionCreator ?? LocationActionCreatorFallback;
                 }
 
-                SynchronizeStateLocationWithUri(null, _uriHelper.GetAbsoluteUri());
+                SynchronizeStateLocationWithUri(null, new LocationChangedEventArgs(_uriHelper.GetAbsoluteUri(), false));
             }
         }
 
         private TAction LocationActionCreatorFallback(string uri) => (TAction)(object)new ChangeLocationAction(uri);
 
-        private void SynchronizeStateLocationWithUri(object sender, string newAbsoluteUri)
+        private void SynchronizeStateLocationWithUri(object sender, LocationChangedEventArgs e)
         {
-            if (newAbsoluteUri != _currentLocation && _locationActionCreator != null)
+            if (e.Location != _currentLocation && _locationActionCreator != null)
             {
                 lock (_syncRoot)
                 {
-                    _currentLocation = newAbsoluteUri;
+                    _currentLocation = e.Location;
                 }
 
-                Dispatch(_locationActionCreator(newAbsoluteUri));
+                Dispatch(_locationActionCreator(e.Location));
             }
         }
         #endregion
